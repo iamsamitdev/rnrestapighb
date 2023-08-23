@@ -1,32 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Home from './screens/Home'
-import About from './screens/About'
-import Welcome from './screens/Welcome'
-import Login from './screens/Login'
-import Register from './screens/Register'
-import { AuthProvider } from './context/AuthContext'
 
-// Create a Stack Navigator
-const Stack = createNativeStackNavigator()
+
+// BottomTabNavigator Navigator
+import BottomTabNavigator from './navigations/BottomTabNavigator'
+
+// Auth Navigator
+import AuthNavigator from './navigations/AuthNavigator'
 
 const App = () => {
+
+  // Read token from AsyncStorage
+  const [token, setToken] = useState()
+  const getToken = async () => {
+    const token:any = await AsyncStorage.getItem('token')
+    setToken(token)
+  }
+  getToken()
+
   return (
-      <NavigationContainer>
-        <AuthProvider>
-          <Stack.Navigator initialRouteName='Welcome'>
-            <Stack.Screen name="Welcome" component={Welcome} 
-            options={{headerShown:false}} />
-            <Stack.Screen name="Login" component={Login} 
-            options={{headerShown:false}}/>
-            <Stack.Screen name="Register" component={Register}
-            options={{headerShown:false}}/>
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="About" component={About} />
-          </Stack.Navigator>
-        </AuthProvider>
-      </NavigationContainer>
+    <NavigationContainer>
+      {
+        token == null ?
+        <AuthNavigator />
+        :
+        <BottomTabNavigator />
+      }
+    </NavigationContainer>
   )
 }
 

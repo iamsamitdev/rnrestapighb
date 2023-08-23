@@ -1,14 +1,16 @@
 import React, { useState, useContext } from 'react'
 import {
-  Button,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
   StyleSheet,
   Image,
-  ScrollView
+  ScrollView,
+  Alert,
+  TouchableOpacity
 } from 'react-native'
+
+import CustomButton from '../components/CustomButton'
 
 import { AuthContext } from '../context/AuthContext'
 
@@ -46,14 +48,18 @@ const Login = ({navigation}:any) => {
             secureTextEntry
             />
 
-            <Button
-            title="Login"
-            onPress={() => {
-                login(email, password)
-                // navigation.navigate('Home')
-            }}
-            />
-
+            <CustomButton title="LOGIN" onPress={() => {
+                if (email === '' || password === '') {
+                  Alert.alert('Error','Please fill all fields')
+                  return
+                } else if (password.length < 6) {
+                  Alert.alert('Error','Password must be at least 6 characters')
+                  return
+                } else {
+                  login(email, password)
+                }
+            }} />
+            
             <View style={{flexDirection: 'row', marginTop: 20, justifyContent: 'center'}}>
             <Text>Don't have an account? </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>

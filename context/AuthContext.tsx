@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 interface AuthContextType {
     register: (firstName: string, lastName: string, email: string, password: string) => void,
     login: (email: string, password: string) => void,
+    logout: () => void,
 }
 
 interface AuthProviderProps {
@@ -55,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children  }) => {
                 // keep user logged in
                 AsyncStorage.setItem('token', response.data.token)
                 AsyncStorage.setItem('user', JSON.stringify(response.data.user))
-                navigation.navigate('Home')
+                navigation.navigate('BottomTabNav')
             }else {
                 Alert.alert("Error", response.data.message)
             }
@@ -64,8 +65,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children  }) => {
         })
     }
 
+    // Logout
+    const logout = () => {
+        AsyncStorage.removeItem('token')
+        AsyncStorage.removeItem('user')
+        navigation.navigate('Login')
+    }
+
     return (
-        <AuthContext.Provider value={{ register, login }}>
+        <AuthContext.Provider value={{ register, login, logout }}>
             {children}
         </AuthContext.Provider>
     )

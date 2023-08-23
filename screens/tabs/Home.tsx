@@ -11,30 +11,21 @@ const Home = ({navigation}:any) => {
   }
 
   const [user, setUser] = useState({} as User)
-  const [token, setToken] = useState('')
 
   const getUser = async () => {
     const user:any = await AsyncStorage.getItem('user')
     setUser(JSON.parse(user))
   }
 
-  const getToken = async () => {
-    const token:any = await AsyncStorage.getItem('token')
-    setToken(token)
-  }
-  
   useEffect(() => {
-    getUser(),
-    getToken()
+    getUser()
   }, [])
 
   return (
-    <View>
-      <Text>Welcome: {user.firstname}</Text>
-      <Text>Token: {token}</Text>
-      <Button title="Go to About" 
-        onPress={() => navigation.navigate('About')} 
-      />
+    <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
+      <Text style={{fontSize: 30}}>Welcome:</Text>
+      <Text style={{fontSize: 20}}>{user.firstname} {user.lastname}</Text>
+      <Text style={{fontSize: 20}}>{user.email}</Text>
     </View>
   )
 }

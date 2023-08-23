@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react'
 import {
-  Button,
   Text,
   TextInput,
   TouchableOpacity,
@@ -8,7 +7,10 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Alert
 } from 'react-native'
+
+import CustomButton from '../components/CustomButton'
 
 import { AuthContext } from '../context/AuthContext'
 
@@ -62,13 +64,17 @@ const Register = ({navigation}:any) => {
             secureTextEntry
           />
 
-          <Button
-            title="Register"
-            onPress={() => {
-              register(firstname, lastname, email, password)
-              // navigation.navigate('Login')
-            }}
-          />
+          <CustomButton title="Register" onPress={() => {
+                if (firstname === '' || lastname === '' || email === '' || password === '') {
+                  Alert.alert('Error','Please fill all fields')
+                  return
+                } else if (password.length < 6) {
+                  Alert.alert('Error','Password must be at least 6 characters')
+                  return
+                } else {
+                  register(firstname, lastname, email, password)
+                }
+          }} />
 
           <View style={{flexDirection: 'row', marginTop: 20, justifyContent: 'center'}}>
             <Text>Already have an account? </Text>
